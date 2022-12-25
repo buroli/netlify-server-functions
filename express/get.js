@@ -2,8 +2,7 @@
 const express = require('express');
 const serverless = require('serverless-http');
 const app = express();
-const bodyParser = require('body-parser');
-import fetch from 'node-fetch';
+const fetch = require('node-fetch');
 
 const router = express.Router();
 router.get('/', async (req, res) => {
@@ -55,7 +54,6 @@ router.get('/', async (req, res) => {
   res.end(file);
 });
 
-app.use(bodyParser.json());
 app.use('/.netlify/functions/get', router); // path must route to lambda
 
 module.exports = app;
