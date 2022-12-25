@@ -142,12 +142,14 @@ export const handler = async (event) => {
   }
   const file = await getPlaylist(bitrate);
   console.log('file: ', file);
-  const buffer = file;
+  const buffer = Buffer.toString(file);
   return {
     statusCode: 200,
     headers: {
-      'Content-Type': 'application/x-mpegurl'
+      'Content-Type': 'application/x-mpegurl',
+      'Content-Disposition': 'attachment; filename=test.m3u'
+      //   'Content-length': buffer.length
     },
-    body: buffer.toString('base64')
+    body: buffer
   };
 };

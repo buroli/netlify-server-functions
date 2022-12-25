@@ -31,21 +31,22 @@
         const urlParams = new URLSearchParams(queryString);
         const bitrate = urlParams.get('bitrate')
         console.log('urlParams: ', urlParams.get('bitrate'));
+        await fetch(`/.netlify/functions/get?bitrate=${bitrate || 64}`);
 
-        const getPlaylist = await fetch(`/.netlify/functions/generate?bitrate=${bitrate || 64}`);
-        const playlist = await getPlaylist.text()
-        console.log('playlist: ', playlist);
+        // const getPlaylist = await fetch(`/.netlify/functions/get?bitrate=${bitrate || 64}`);
+        // const playlist = await getPlaylist.text()
+        // console.log('playlist: ', playlist);
         
         
 
-        // Start file download.
-        document.getElementById("dwn-btn").addEventListener("click", function () {
-          // Generate download of hello.txt file with some content
-          //var text = document.getElementById("text-val").value;
-          var filename = "playlist.m3u";
+        // // Start file download.
+        // document.getElementById("dwn-btn").addEventListener("click", function () {
+        //   // Generate download of hello.txt file with some content
+        //   //var text = document.getElementById("text-val").value;
+        //   var filename = "playlist.m3u";
 
-          download(filename, playlist);
-        }, false);
+        //   download(filename, playlist);
+        // }, false);
 
 
 
