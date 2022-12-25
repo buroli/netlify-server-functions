@@ -20,35 +20,39 @@ router.get('/', async (req, res) => {
   };
 
   const getPlaylist = async (bitrate) => {
-    const response = await fetch(source);
-    const json = await response.json();
+    try {
+      const response = await fetch(source);
+      const json = await response.json();
 
-    const webradios = json.webradios;
-    const m3u = [];
-    const header = `#EXTM3U\r\n#${new Date()}\r\n`;
-    let d = '';
-    const fallbackBitrate = bitrate ? bitrate : '64';
+      const webradios = json.webradios;
+      const m3u = [];
+      const header = `#EXTM3U\r\n#${new Date()}\r\n`;
+      let d = '';
+      const fallbackBitrate = bitrate ? bitrate : '64';
 
-    for (const webradio of webradios) {
-      console.log('webradio: ', webradio);
-      d +=
-        '#EXTINF:-1,' +
-        webradio.name +
-        '\r\n' +
-        webradio[quality[fallbackBitrate]] +
-        '\r\n';
+      for (const webradio of webradios) {
+        console.log('webradio: ', webradio);
+        d +=
+          '#EXTINF:-1,' +
+          webradio.name +
+          '\r\n' +
+          webradio[quality[fallbackBitrate]] +
+          '\r\n';
 
-      m3u.push(webradio);
+        m3u.push(webradio);
+      }
+
+      m3uFile = header + d;
+
+      return m3uFile;
+    } catch (error) {
+      console.log('error from nrj get: ', error);
     }
-
-    m3uFile = header + d;
-
-    return m3uFile;
   };
   const file = await getPlaylist(bitrate);
   res.writeHead(200, {
     'Content-Type': 'application/x-mpegurl',
-    'Content-Disposition': 'attachment; filename=test.m3u'
+    'Content-Disposition': `attachment; filename=playlist_${new Date().toLocaleDateString()}.m3u`
   });
 
   res.end(file);
