@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
+    "build": "netlify-lambda build express",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,5 +23,8 @@
     "express": "^4.18.2",
     "node-fetch": "^3.3.0",
     "serverless-http": "^3.1.0"
+  },
+  "dependencies": {
+    "netlify-lambda": "^2.0.15"
   }
 }
