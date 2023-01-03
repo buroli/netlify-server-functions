@@ -28,6 +28,7 @@ router.get('/', async (req, res) => {
             .then((response) => response.json())
             .then((final) => {
                 const webradios = final.webradios;
+          console.log('webradios: ', webradios);
                 const m3u = [];
                 const header = `#EXTM3U\r\n#${new Date()}\r\n`;
                 let d = '';
