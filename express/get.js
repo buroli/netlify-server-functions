@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
   };
 
 
-  const process = async () => {
+  const process = () => {
     return new Promise((resolve, reject) => {
         fetch(source)
             .then((response) => response.json())
@@ -55,7 +55,8 @@ router.get('/', async (req, res) => {
     })
 
 
-  const file = await process();
+  const file = process();
+    console.log('file: ', file);
   
   res.writeHead(200, {
     'Content-Type': 'application/x-mpegurl',
