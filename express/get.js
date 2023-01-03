@@ -7,8 +7,9 @@ const fetch = require('node-fetch');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const bitrate = req?.query?.bitrate;
-console.log('bitrate: ', req?.query?.bitrate)
+  
+    const bitrate = req?.query?.bitrate;
+  console.log('bitrate: ', req?.query?.bitrate)
   const source =
     'http://players.nrjaudio.fm/wr_api/live/fr?act=get_mobile_setup&cp=utf8&fmt=json&id_sysos=2&ver=2&id_radio=1';
   const url_64k_aac = 'url_64k_aac';
@@ -21,7 +22,7 @@ console.log('bitrate: ', req?.query?.bitrate)
   };
 
 
-  function process() {
+  const process = async () => {
     return new Promise((resolve, reject) => {
         fetch(source)
             .then((response) => response.json())
@@ -53,7 +54,7 @@ console.log('bitrate: ', req?.query?.bitrate)
     })
 
 
-const file = await process();
+  const file = await process();
   
   res.writeHead(200, {
     'Content-Type': 'application/x-mpegurl',
