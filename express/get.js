@@ -5,6 +5,7 @@ const app = express();
 const fetch = require('node-fetch');
 
 const router = express.Router();
+
 router.get('/', async (req, res) => {
   const bitrate = req?.query?.bitrate;
 console.log('bitrate: ', req?.query?.bitrate)
@@ -19,40 +20,40 @@ console.log('bitrate: ', req?.query?.bitrate)
     128: url_128k_mp3
   };
 
-  const getPlaylist = async (bitrate) => {
-    try {
-      console.log('init fetch')
-      const response = await fetch(source);
-      const json = await response.json();
-      console.log('json: ', json)
 
-      const webradios = json.webradios;
-      const m3u = [];
-      const header = `#EXTM3U\r\n#${new Date()}\r\n`;
-      let d = '';
-      const fallbackBitrate = bitrate ? bitrate : '64';
+  function process() {
+    return new Promise((resolve, reject) => {
+        fetch(source)
+            .then((response) => response.json())
+            .then((final) => {
+                const webradios = final.webradios;
+                const m3u = [];
+                const header = `#EXTM3U\r\n#${new Date()}\r\n`;
+                let d = '';
+                const fallbackBitrate = bitrate ? bitrate : '64';
+                
+                // build m3u
+                for (const webradio of webradios) {
+                    console.log('webradio: ', webradio);
+                    d +=
+                      '#EXTINF:-1,' +
+                      webradio.name +
+                      '\r\n' +
+                      webradio[quality[fallbackBitrate]] +
+                      '\r\n';
+            
+                    m3u.push(webradio);
+                }
 
-      for (const webradio of webradios) {
-        console.log('webradio: ', webradio);
-        d +=
-          '#EXTINF:-1,' +
-          webradio.name +
-          '\r\n' +
-          webradio[quality[fallbackBitrate]] +
-          '\r\n';
+                m3uFile = header + d;
+                console.log('m3uFile: ', m3uFile)
+                resolve(m3uFile);
+            })
+            .catch((error) => reject(error))
+    })
 
-        m3u.push(webradio);
-      }
 
-      m3uFile = header + d;
-      console.log('m3uFile: ', m3uFile)
-      return m3uFile;
-    } catch (error) {
-      console.log('error from nrj get: ', JSON.parse(error));
-    }
-  };
-  
-  const file = await getPlaylist(bitrate);
+const file = await process();
   
   res.writeHead(200, {
     'Content-Type': 'application/x-mpegurl',
