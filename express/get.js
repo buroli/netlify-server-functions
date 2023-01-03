@@ -6,8 +6,8 @@ const fetch = require('node-fetch');
 
 const router = express.Router();
 router.get('/', async (req, res) => {
-  const bitrate = req.query.bitrate;
-
+  const bitrate = req?.query?.bitrate;
+console.logt('bitrate: ', req?.query?.bitrate)
   const source =
     'http://players.nrjaudio.fm/wr_api/live/fr?act=get_mobile_setup&cp=utf8&fmt=json&id_sysos=2&ver=2&id_radio=1';
   const url_64k_aac = 'url_64k_aac';
@@ -21,6 +21,7 @@ router.get('/', async (req, res) => {
 
   const getPlaylist = async (bitrate) => {
     try {
+      console.log('init fetch')
       const response = await fetch(source);
       const json = await response.json();
 
@@ -43,13 +44,15 @@ router.get('/', async (req, res) => {
       }
 
       m3uFile = header + d;
-
+      console.log('m3uFile: ', m3uFile)
       return m3uFile;
     } catch (error) {
-      console.log('error from nrj get: ', error);
+      console.log('error from nrj get: ', error?.response?.data);
     }
   };
+  
   const file = await getPlaylist(bitrate);
+  
   res.writeHead(200, {
     'Content-Type': 'application/x-mpegurl',
     'Content-Disposition': `attachment; filename=playlist_${new Date().toLocaleDateString()}.m3u`
