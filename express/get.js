@@ -24,6 +24,7 @@ console.log('bitrate: ', req?.query?.bitrate)
       console.log('init fetch')
       const response = await fetch(source);
       const json = await response.json();
+      console.log('json: ', json)
 
       const webradios = json.webradios;
       const m3u = [];
@@ -47,7 +48,7 @@ console.log('bitrate: ', req?.query?.bitrate)
       console.log('m3uFile: ', m3uFile)
       return m3uFile;
     } catch (error) {
-      console.log('error from nrj get: ', error?.response?.data);
+      console.log('error from nrj get: ', error?.response);
     }
   };
   
