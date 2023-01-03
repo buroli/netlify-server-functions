@@ -48,7 +48,7 @@ console.log('bitrate: ', req?.query?.bitrate)
       console.log('m3uFile: ', m3uFile)
       return m3uFile;
     } catch (error) {
-      console.log('error from nrj get: ', error?.response);
+      console.log('error from nrj get: ', JSON.parse(error));
     }
   };
   
